@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Speak Up!</title>
+
+
+    <!-- AJAX CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+    <!-- Bootstrap CDNs -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="script" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+
+    <!-- Compiled and minified materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/3a6781b4ed.js"></script>
+
+    <!-- custom Styles -->
+    <link rel="stylesheet" type="text/css" href="./styles/styles.css">
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <!-- moment CDN -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+
+
+</head>
+
+<body>
+    <div class="backgroundImage">
+        <a class="btn btn-secondary btn-small blue darken-4" id="signUpButton" href="/registerPage" role="button" style="position: absolute; right: 0; top: 0;">Sign In <i class="fas fa-sign-in-alt"></i> </a>
+        <div class="jumbotron text-center" style="height: auto;">
+            <h1 class="display-4">SPEAK UP!</h1>
+            <p class="lead">We are aiming to give a voice to the minorities and women to speak up and report crimes which often go unreported</p>
+            <hr class="my-3">
+            <!-- <p>This application has the true victims of crime in mind, it is designed to give any user the ability to report a crime as well as view potentially dangerous areas.</p> -->
+            <a class="btn btn-secondary btn-md blue darken-4" href="https://github.com/sajadgzd/project-2/blob/master/README.md" role="button" target="_blank">Learn more</a>
+            <a class="btn btn-secondary btn-md blue darken-4" href="#findForm" role="button">View Crimes</a>
+            <a class="btn btn-secondary btn-md blue darken-4" href="#reportForm" role="button">Report Crimes</a>
+        </div>
+
+        <div class="modal-body row">
+            <div id="mapContainer" class="col-md-6">
+                <div id="map"></div>
+                <div id="recentCrime" class="col-md-12">
+                    <h1 class="reported">MOST RECENTLY REPORTED CRIMES:</h1>
+                    <div id="crimeDisplay" class="col-md-12">
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="forms" class="col-md-6">
+                <!-- Form for looking for crimes in a given area/time -->
+
+                <!-- Input for selecting borough to search in -->
+                <div id="findForm">
+                    <h5>Find</h5>
+                    <form>
+                        <div id="form-group">
+                            <label for="findLocation">Crime Category:</label>
+                            <select class="form-control" id="findCategory">
+                                    <option value="All">All</option>
+                                    <option value="SexualHarassment">Sexual Harassment</option>
+                                    <option value="Rape">Rape</option>
+                                    <option value="Groping">Groping</option>
+                                    <option value="HateSpeech">Hate Speech</option> 
+                                    <option value="RacialSlur">Racial Slur</option>
+                                    <option value="Discrimination">Discrimination</option>
+                                    <option value="Homophobia">Homophobia</option>
+                                    <option value="Xenophobia">Xenophobia</option>
+                                    <option value="Anti-Semitism">Anti-Semitism</option>
+                                    <option value="Islamophobia">Islamophobia</option>
+
+                        </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="findLocation">Location:</label>
+                            <select class="form-control" id="findLocation">
+                            <option value="Bronx">Bronx</option>
+                            <option value="Brooklyn">Brooklyn</option>
+                            <option value="Manhattan">Manhattan</option>
+                            <option value="Queens">Queens</option>
+                            <option value="StatenIsland">Staten Island</option>
+                        </select>
+
+                        </div>
+
+
+
+                        <!-- Date inputs for finding reports within a given time frame -->
+
+                        <div class="input-field col s6">From:
+                            <label for="startDate"></label>
+                            <input type="date" id="startDate" name="search-start" value="2018-07-22" min="2015-01-01" max="2018-12-31">
+                        </div>
+                        <div class="input-field col s6">To:
+                            <label for="endDate"></label>
+                            <input type="date" id="endDate" name="search-end" value="2018-07-22" min="2015-01-01" max="2018-12-31">
+
+                            <br>
+                        </div>
+                        <!-- Time inputs with two 24 hour times. default range is set to all day -->
+                        <div class="input-field col s6">Start time
+                            <label for="findStartTime"></label>
+                            <input type="time" id="findStartTime" name="findStartTime" value="00:01">
+                        </div>
+                        <div class="input-field col s6">End time
+                            <label for="findEndTime"></label>
+                            <input type="time" id="findEndTime" name="findEndTime" value="23:59">
+                        </div>
+
+                        <input type="submit" id="findButton" class="btn btn-secondary btn-sm blue darken-4" style="margin-left: 10px;">
+                        <!-- | <span style="color:red">for
+                        debugging purposes to get all crimes of the type</span> <input type="submit" id="findAllButton" class="btn btn-secondary btn-sm blue darken-4"> -->
+
+
+                    </form>
+
+
+
+                </div>
+                <br>
+                <hr style="color: white">
+                <!-- Form for submitting a report -->
+                <div id="reportForm">
+                    <h5>Report</h5>
+                    <form>
+                        <!-- input for report Category -->
+                        <div class="form-group">
+                            <label for="reportCategory">Crime Category:</label>
+                            <select class="form-control" id="reportCategory">
+                            
+                            <option value="SexualHarassment">Sexual Harassment</option>
+                            <option value="Rape">Rape</option>
+                            <option value="Groping">Groping</option>
+                            <option value="HateSpeech">Hate Speech</option> 
+                            <option value="RacialSlur">Racial Slur</option>
+                            <option value="Discrimination">Discrimination</option>
+                            <option value="Homophobia">Homophobia</option>
+                            <option value="Xenophobia">Xenophobia</option>
+                            <option value="Anti-Semitism">Anti-Semitism</option>
+                            <option value="Islamophobia">Islamophobia</option>
+
+                        </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportLocation">Borough:</label>
+                            <select class="form-control" id="reportLocation">
+                            <option value="Bronx">Bronx</option>
+                            <option value="Brooklyn">Brooklyn</option>
+                            <option value="Manhattan">Manhattan</option>
+                            <option value="Queens">Queens</option>
+                            <option value="StatenIsland">Staten Island</option>
+                        </select>
+                        </div>
+
+                        <!-- location input using Google Maps search bar -->
+                        <!-- TODO: add current location as default value -->
+                        <div class="input-field col s12">
+                            <div class="locationInput">Location <sup>(required)</sup>
+                                <input id="pac-input" class="controls" type="text" placeholder="Location of Crime" required>
+                                <div class="invalid" style="width: 290px">Please provide a location</div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <!-- specific date to report crime -->
+                        <div class="input-field col s6">
+                            Date: <input type="date" id="reportDate" name="reportDate" value="2018-07-22" min="2015-01-01" max="2018-12-31">
+                        </div>
+                        <br>
+
+                        <!-- Specific time to give to reported crime -->
+                        <div class="input-field col s6"> Time of Incident:
+                            <label for="reportTime"></label>
+                            <input type="time" id="reportTime" name="reportTime" value="00:00">
+                        </div>
+
+                        <!-- optional description area -->
+                        <!-- <div class="form-group col s12">
+                        <div class="input-field ">
+                            <label for="reportDescription">Description:</label>
+                            <textarea class="form-control" id="reportDescription" rows="3"></textarea>
+                        </div>
+                    </div> -->
+
+
+                        <form class="col s12">
+                            <div class="input-field col s12">
+
+                                <textarea id="reportDescription" class="materialize-textarea" style="color: white;"></textarea>
+                                <label for="textarea1">Description (optional)</label>
+
+                            </div>
+                        </form>
+
+
+                        <!-- Default checked -->
+                        <p>
+                            <label for="isReported">
+                            <input type="checkbox" id="isReported">
+                            <span style="margin-left: 12px;">Was the Crime Reported to the Police?</span>
+
+                        </label>
+                        </p>
+
+
+                        <input type="submit" id="reportButton" class="btn btn-secondary btn-sm blue darken-4" style="margin-left: 10px;">
+                    </form>
+                </div>
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer" style="background: rgb(2, 17, 49);
+    color: rgb(235, 235, 235); height: auto;">
+        <div class="container">
+            <div class="row">
+                <div class="col l4  s6">
+                    <h6 class="white-text">Developers <i class="fab fa-github" style="font-size: 20px; color:#ffffff;"></i> </h6>
+                    <span style="font-size: 13px">
+                        <a class="grey-text text-lighten-3" href="https://github.com/sajadgzd" target="_blank">Sajad Gholamzadehrizi</a> |
+                        <a class="grey-text text-lighten-3" href="https://github.com/rdoty1" target="_blank">Ryan Doty</a> |
+                        <a class="grey-text text-lighten-3" href="https://github.com/Cristo12345" target="_blank">Christian Suleiman</a>
+                        <!-- <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li> -->
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2019 SPEAK UP
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+    <script>
+        // This example adds a search box to a map, using the Google Place Autocomplete
+        // feature. People can enter geographical searches. The search box will return a
+        // pick list containing a mix of places and predicted search terms.
+        // This example requires the Places library. Include the libraries=places
+        // parameter when you first load the API. For example:
+        var map;
+        var geocoder;
+
+        function initAutocomplete() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: 40.730610,
+                    lng: -73.935242
+                },
+                zoom: 10,
+                mapTypeId: 'roadmap'
+            });
+            // Create the search box and link it to the UI element.
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function() {
+                searchBox.setBounds(map.getBounds());
+            });
+            var markers = [];
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+                if (places.length == 0) {
+                    return;
+                }
+                // Clear out the old markers.
+                markers.forEach(function(marker) {
+                    marker.setMap(null);
+
+                });
+
+                console.log("HELLO")
+                markers = [];
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    var icon = {
+                        url: "../images/mapIcons/noun_Hand_164670.png",
+                        size: new google.maps.Size(30, 45),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(10, 15),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+                    // Create a marker for each place.
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+
+
+            });
+
+
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOghrohWNA37hFNGoey7gZSLHzicCD55U&libraries=places&callback=initAutocomplete" async defer></script>
+
+
+    <script type="text/javascript" src="./js/index.js"></script>
+
+</body>
+
+</html>
